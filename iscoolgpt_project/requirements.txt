@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+google-generativeai
+python-dotenv
+
+# Ferramentas de Teste
+pytest
+httpx

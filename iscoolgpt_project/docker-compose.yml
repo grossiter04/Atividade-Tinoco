@@ -1,0 +1,10 @@
+# docker-compose.yml (OPCIONAL para este projeto)
+version: '3.8'
+
+services:
+  web:
+    build: .  # Constrói a imagem usando o Dockerfile no diretório atual
+    ports:
+      - "8000:8000" # Mapeia a porta
+    env_file:
+      - .env     # Injeta o arquivo .env
