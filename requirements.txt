@@ -6,3 +6,6 @@ python-dotenv
 # Ferramentas de Teste
 pytest
 httpx
+
+flake8
+pytest
