@@ -11,8 +11,8 @@ load_dotenv()
 # Pega a chave do ambiente
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-print("Chave aqui")
-print(GEMINI_API_KEY)
+#print("Chave aqui")
+#print(GEMINI_API_KEY)
 
 if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY não definida no .env!")
