@@ -1,15 +1,20 @@
-# Nome do Pipeline de CI (Continuous Integration)
-name: IsCoolGPT - CI (Validar PR para Develop)
+# Nome do Pipeline de CI
+name: IsCoolGPT - CI (Validar PR e Push)
 
 on:
-  # Dispara esta ação em todo Pull Request
+  # Dispara esta ação ao fazer PUSH nas branches listadas
+  push:
+    branches: [ "develop", "main" ]
+
+  # Dispara esta ação ao abrir um Pull Request PARA as branches listadas
   pull_request:
-    # Apenas em PRs direcionados para a branch 'develop'
-    branches: [ "develop" ]
+    # Aqui está o segredo: Ao listar "main", qualquer PR apontando para main (ex: develop -> main) vai disparar o teste
+    branches: [ "develop", "main" ]
 
 jobs:
   # Job 1: Validar o código Python (Lint e Testes)
   validate-code:
+    name: Validar Código (Testes e Lint)
     runs-on: ubuntu-latest
     steps:
       - name: 1. Checkout do código
@@ -26,11 +31,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: 4. Rodar Testes Unitários (pytest)
-        # Este comando roda os testes na pasta /tests
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: pytest
 
   # Job 2: Validar se a imagem Docker constrói
   validate-docker-build:
+    name: Validar Build Docker
     runs-on: ubuntu-latest
     # Este job só roda se o 'validate-code' passar
     needs: validate-code
@@ -44,6 +51,4 @@ jobs:
 
       - name: 3. Validar Build do Docker
         run: |
-          # Apenas construímos a imagem para validar o Dockerfile.
-          # Não fazemos PUSH para o ECR aqui (isso é papel do CD).
           docker build -t iscoolgpt-ci-validation:latest .
