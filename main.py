@@ -1,9 +1,11 @@
 import os
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import HTMLResponse 
+from fastapi.staticfiles import StaticFiles 
 from pydantic import BaseModel
 import google.generativeai as genai
 from typing import Annotated
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 
 # Carrega o arquivo .env
 load_dotenv() 
@@ -19,7 +21,6 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# --- Modelos de Dados (Pydantic) ---
 class StudyQuery(BaseModel):
     prompt: str
     context: str | None = None
@@ -27,10 +28,10 @@ class StudyQuery(BaseModel):
 class AIResponse(BaseModel):
     answer: str
 
-# --- Inicialização do App ---
 app = FastAPI(title="IsCoolGPT API")
 
-# --- Lógica de Negócio (Stateless) ---
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 def get_gemini_model():
     model = genai.GenerativeModel('gemini-2.5-flash')
     return model
@@ -49,10 +50,11 @@ async def fetch_gemini_response(model: genai.GenerativeModel, query: StudyQuery)
         print(f"Erro na API do Gemini: {e}")
         raise HTTPException(status_code=502, detail="Erro ao contatar o modelo de IA.")
 
-# --- Endpoints da API ---
-@app.get("/")
-def read_root():
-    return {"status": "IsCoolGPT (stateless) está operacional."}
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    # Lê o arquivo index.html e retorna para o navegador
+    with open("static/index.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 @app.post("/ask", response_model=AIResponse)
 async def handle_study_query(
