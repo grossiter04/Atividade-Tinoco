@@ -1,0 +1,12 @@
+name: CD - Deploy Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acionar Deploy Hook do Render (Produção)
+        run: curl "${{ secrets.RENDER_DEPLOY_HOOK_PROD }}"

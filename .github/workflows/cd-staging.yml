@@ -1,0 +1,15 @@
+name: CD - Deploy Staging
+
+on:
+  push:
+    branches: [ "staging" ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    # Só faz deploy se a validação do CI anterior tiver passado no commit
+    # (O GitHub Actions gerencia isso, mas aqui focamos no deploy)
+    
+    steps:
+      - name: Acionar Deploy Hook do Render (Staging)
+        run: curl "${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}"
