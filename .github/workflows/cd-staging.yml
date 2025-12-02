@@ -62,6 +62,4 @@ jobs:
     if: success()
     steps:
       - name: Acionar Render (Produção)
-        # Aciona o hook manualmente pois o push automático do bot
-        # muitas vezes não dispara outros workflows (segurança do GitHub)
         run: curl "${{ secrets.RENDER_DEPLOY_HOOK_PROD }}"

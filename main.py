@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 # Carrega o arquivo .env
 load_dotenv() 
 
-# Pega a chave do ambiente
+# Chave da API Gemini
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 #print("Chave aqui")
