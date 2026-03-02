@@ -8,7 +8,7 @@ class MockGeminiResponse:
 
 class MockGeminiModel:
     async def generate_content_async(self, prompt, generation_config=None):
-        return MockGeminiResponse("Esta é uma resposta simulada de teste!!")
+        return MockGeminiResponse("Esta é uma resposta simulada de teste!!!!")
 
 client = TestClient(app)
 
